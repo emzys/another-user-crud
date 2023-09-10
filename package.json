@@ -1,0 +1,8 @@
+{
+  "name": "another-user-crud",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:emzys/another-user-crud.git",
+  "author": "emzys",
+  "license": "MIT"
+}
