@@ -5,6 +5,11 @@
   "repository": "git@github.com:emzys/another-user-crud.git",
   "author": "emzys",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon ./build/index.js",
+    "start-dev": "tsc && yarn dev"
+  },
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.6.0",
