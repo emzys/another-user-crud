@@ -7,6 +7,7 @@ class App {
 
   constructor() {
     this.app = express();
+    this.routes();
   }
 
   protected routes(): void {
@@ -15,3 +16,10 @@ class App {
     });
   }
 }
+
+const port: number = 8000;
+const app = new App().app;
+
+app.listen(port, () => {
+  console.log(`Server running on port: ${port}`);
+});
