@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
+import { User } from "../model/User";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -14,10 +15,10 @@ class Database {
   private POSTGRES_PORT = process.env.POSTGRES_PORT as unknown as number;
 
   constructor() {
-    this.connectPostgreSQL();
+    this.connect();
   }
 
-  private async connectPostgreSQL() {
+  private async connect() {
     this.sequelize = new Sequelize({
       database: this.POSTGRES_DB,
       username: this.POSTGRES_USER,
@@ -25,6 +26,13 @@ class Database {
       host: this.POSTGRES_HOST,
       port: this.POSTGRES_PORT,
       dialect: "postgres",
+      models: [User],
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000,
+      },
     });
 
     // try {
