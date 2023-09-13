@@ -22,17 +22,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
+const User_1 = require("../model/User");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 class Database {
@@ -44,32 +36,37 @@ class Database {
             .POSTGRES_PASSWORD;
         this.POSTGRES_HOST = process.env.POSTGRES_HOST;
         this.POSTGRES_PORT = process.env.POSTGRES_PORT;
-        this.connectPostgreSQL();
+        this.connect();
     }
-    connectPostgreSQL() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.sequelize = new sequelize_typescript_1.Sequelize({
-                database: this.POSTGRES_DB,
-                username: this.POSTGRES_USER,
-                password: this.POSTGRES_PASSWORD,
-                host: this.POSTGRES_HOST,
-                port: this.POSTGRES_PORT,
-                dialect: "postgres",
-            });
-            // try {
-            //   await this.sequelize.authenticate();
-            //   console.log("Connection has been established successfully.");
-            // } catch (error) {
-            //   console.error("Unable to connect to the database :>>", error);
-            // }
-            yield this.sequelize
-                .authenticate()
-                .then(() => {
-                console.log("Connected to PostgreSQL");
-            })
-                .catch((err) => {
-                console.log("PortgreSQL database connection error :>> ", err);
-            });
+    async connect() {
+        this.sequelize = new sequelize_typescript_1.Sequelize({
+            database: this.POSTGRES_DB,
+            username: this.POSTGRES_USER,
+            password: this.POSTGRES_PASSWORD,
+            host: this.POSTGRES_HOST,
+            port: this.POSTGRES_PORT,
+            dialect: "postgres",
+            models: [User_1.User],
+            pool: {
+                max: 5,
+                min: 0,
+                acquire: 30000,
+                idle: 10000,
+            },
+        });
+        // try {
+        //   await this.sequelize.authenticate();
+        //   console.log("Connection has been established successfully.");
+        // } catch (error) {
+        //   console.error("Unable to connect to the database :>>", error);
+        // }
+        await this.sequelize
+            .authenticate()
+            .then(() => {
+            console.log("Connected to PostgreSQL");
+        })
+            .catch((err) => {
+            console.log("PortgreSQL database connection error :>> ", err);
         });
     }
 }
